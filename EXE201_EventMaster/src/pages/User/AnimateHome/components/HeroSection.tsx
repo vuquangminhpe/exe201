@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ChevronRight, Ticket, Calendar, Users } from 'lucide-react'
+import { ChevronRight, Ticket, Calendar, Users, CreditCard } from 'lucide-react'
 
 interface HeroSectionProps {
   isPageLoaded: boolean
@@ -7,61 +7,22 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ isPageLoaded }) => {
   const heroSectionRef = useRef<HTMLDivElement>(null)
-  const cursorRef = useRef<HTMLDivElement>(null)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [scrollY, setScrollY] = useState(0)
 
-  // Track mouse position and scroll
+  // Track scroll position
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY })
-
-      // Update cursor position based on mouse
-      if (cursorRef.current) {
-        cursorRef.current.style.left = `${e.clientX}px`
-        cursorRef.current.style.top = `${e.clientY}px`
-      }
-    }
-
     const handleScroll = () => {
       setScrollY(window.scrollY)
     }
 
-    // Register event listeners
-    window.addEventListener('mousemove', handleMouseMove)
+    // Register event listener
     window.addEventListener('scroll', handleScroll)
 
     // Cleanup
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
-
-  // Handle 3D effect based on mouse for hero section
-  useEffect(() => {
-    if (!heroSectionRef.current || !isPageLoaded) return
-
-    const heroElement = heroSectionRef.current
-    const heroRect = heroElement.getBoundingClientRect()
-    const centerX = heroRect.left + heroRect.width / 2
-    const centerY = heroRect.top + heroRect.height / 2
-
-    // Calculate tilt based on mouse position
-    const moveX = (mousePosition.x - centerX) / 25
-    const moveY = (mousePosition.y - centerY) / 25
-
-    // Apply transform
-    heroElement.style.transform = `perspective(1000px) rotateX(${-moveY}deg) rotateY(${moveX}deg) scale3d(1.02, 1.02, 1.02)`
-
-    // Apply parallax effect to child elements
-    const parallaxElements = heroElement.querySelectorAll('.parallax-element')
-    parallaxElements.forEach((el) => {
-      const htmlEl = el as HTMLElement
-      const depth = parseFloat(htmlEl.getAttribute('data-depth') || '0.1')
-      htmlEl.style.transform = `translate3d(${moveX * depth * 50}px, ${moveY * depth * 50}px, 0)`
-    })
-  }, [mousePosition, isPageLoaded])
 
   // Handle parallax effect when scrolling
   useEffect(() => {
@@ -131,10 +92,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ isPageLoaded }) => {
             <p className='text-gray-300 text-lg mb-8 relative'>
               Nền tảng quản lý sự kiện toàn diện giúp bạn kiểm soát mọi khía cạnh của sự kiện từ vé, người tham dự, lịch
               trình đến phân cấp quyền quản lý.
-              <span
-                className='absolute -left-3 top-0 bottom-0 w-1 bg-blue-500/30 rounded-full parallax-element'
-                data-depth='0.1'
-              ></span>
+              <span className='absolute -left-3 top-0 bottom-0 w-1 bg-blue-500/30 rounded-full'></span>
             </p>
 
             <div className='flex flex-col sm:flex-row gap-4'>
@@ -145,379 +103,290 @@ const HeroSection: React.FC<HeroSectionProps> = ({ isPageLoaded }) => {
               </button>
 
               <button className='px-6 py-3 bg-gray-800/80 hover:bg-gray-700 backdrop-blur-sm rounded-lg font-medium transition-all flex items-center justify-center hover-scale relative overflow-hidden group border border-gray-700'>
-                <span className='relative z-10 text-black'>Xem demo</span>
+                <span className='relative text-black z-10'>Xem demo</span>
                 <span className='absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-700 opacity-0 group-hover:opacity-100 transition-opacity'></span>
               </button>
             </div>
 
             {/* Floating particles */}
+            <div className='absolute -left-10 top-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl animate-float'></div>
             <div
-              className='absolute -left-10 top-10 w-20 h-20 bg-blue-500/10 rounded-full blur-xl animate-float parallax-element'
-              data-depth='0.2'
-            ></div>
-            <div
-              className='absolute -right-5 bottom-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl animate-float parallax-element'
-              data-depth='0.15'
+              className='absolute -right-5 bottom-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl animate-float'
               style={{ animationDelay: '-2s' }}
             ></div>
           </div>
-          <div
-            className='lg:w-1/2 relative z-10 perspective-1000 animate-on-scroll'
-            data-animation='fadeInRight'
-            ref={heroSectionRef}
-          >
-            {/* 3D Robot Management System - Enhanced - Adjusted positioning */}
-            <div className='relative w-full h-full min-h-[500px] md:min-h-[580px] flex items-center justify-center transform-style-3d mt-5'>
+
+          {/* 3D Dashboard - Replacing Robot */}
+          <div className='lg:w-1/2 relative z-10 animate-on-scroll' data-animation='fadeInRight' ref={heroSectionRef}>
+            {/* 3D Dashboard Container */}
+            <div className='relative w-full h-full min-h-[500px] md:min-h-[580px] flex items-center justify-center'>
               {/* Background effects */}
-              <div
-                className='absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-600/10 to-purple-600/20 rounded-3xl blur-3xl -m-2 animate-pulse'
-                style={{ animationDuration: '8s' }}
-              ></div>
+              <div className='absolute inset-0 bg-gradient-to-r from-blue-600/20 via-indigo-600/10 to-purple-600/20 rounded-3xl blur-3xl -m-2'></div>
 
-              {/* Holographic ring effect */}
+              {/* 3D Dashboard Card */}
               <div
-                className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full border-4 border-blue-500/10 animate-pulse opacity-30'
-                style={{ transform: 'rotateX(75deg)', animationDuration: '10s' }}
-              ></div>
-              <div
-                className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full border-4 border-purple-500/10 animate-pulse opacity-30'
-                style={{ transform: 'rotateX(75deg)', animationDuration: '12s', animationDelay: '-2s' }}
-              ></div>
-
-              {/* Grid surface effect */}
-              <div
-                className='absolute inset-0 opacity-10'
+                className='relative w-full max-w-4xl bg-gradient-to-b from-gray-900/95 to-gray-800/95 rounded-2xl p-8 shadow-2xl border border-gray-700/50 backdrop-blur-sm overflow-hidden'
                 style={{
-                  backgroundImage:
-                    'linear-gradient(rgba(59, 130, 246, 0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.2) 1px, transparent 1px)',
-                  backgroundSize: '20px 20px',
-                  transform: 'perspective(1000px) rotateX(60deg) translateY(100px) scale(1.5)'
+                  transform: 'perspective(1000px) rotateX(20deg)',
+                  transformOrigin: 'center top',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)'
                 }}
-              ></div>
-
-              {/* Enhanced Robot - Slightly smaller for better fit */}
-              <div
-                className='relative transform-style-3d group scale-95'
-                style={{ transform: 'rotateX(5deg) rotateY(15deg)' }}
               >
-                {/* Holographic floating elements */}
-                <div className='absolute -top-16 left-1/2 -translate-x-1/2 w-80 h-16 flex justify-center overflow-hidden opacity-60'>
-                  <div className='relative w-full h-full animate-scan'>
-                    <div className='absolute top-0 left-0 w-full text-center font-mono text-sm text-blue-400 opacity-70'>
-                      EVENT MANAGEMENT SYSTEM v3.7
-                    </div>
-                    <div className='absolute top-5 left-0 w-full text-center font-mono text-xs text-blue-400 opacity-70'>
-                      <span className='animate-blink'>// INITIALIZING PROTOCOLS //</span>
-                    </div>
-                    <div className='absolute bottom-0 left-0 w-full text-center font-mono text-xs text-blue-400 opacity-70'>
-                      &lt;/&gt; SYSTEM READY
-                    </div>
-                  </div>
+                {/* Dashboard Header */}
+                <div className='mb-6'>
+                  <h2 className='text-2xl md:text-3xl font-bold text-blue-400'>Event Dashboard</h2>
+                  <p className='text-gray-400 text-sm'>Quản lý tất cả sự kiện của bạn từ một giao diện trực quan</p>
                 </div>
 
-                {/* Robot head - Modernized */}
-                <div className='relative w-44 h-44 mx-auto transform-style-3d overflow-visible'>
-                  {/* Head back panel with metallic effect */}
-                  <div
-                    className='absolute inset-0 bg-gradient-to-b from-gray-800 via-gray-700 to-gray-800 rounded-2xl shadow-lg border border-gray-700 overflow-hidden'
-                    style={{
-                      boxShadow: 'inset 0 0 20px rgba(0, 0, 0, 0.5)'
-                    }}
-                  >
-                    {/* Tech patterns */}
-                    <div className='absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_rgba(59,_130,_246,_0.2)_0%,_transparent_70%)]'></div>
+                {/* Dashboard Top Stats Cards */}
+                <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-6'>
+                  {/* Event Stats Cards - Vé đã bán */}
+                  <div className='hover-card-container'>
+                    <div className='card-base bg-blue-900/50 rounded-xl p-5 border border-blue-800/40 shadow-lg'>
+                      <div className='flex justify-between items-start mb-1'>
+                        <div className='flex items-center'>
+                          <Ticket className='w-5 h-5 text-blue-400 mr-2' />
+                          <span className='text-blue-200 text-sm'>Vé đã bán</span>
+                        </div>
+                        <div className='text-xs text-blue-200 font-semibold bg-blue-500/30 px-2 py-0.5 rounded-full'>
+                          +12%
+                        </div>
+                      </div>
 
-                    {/* Circuit lines */}
-                    <div className='absolute inset-0 opacity-30'>
-                      <div className='absolute top-5 left-5 right-5 h-px bg-blue-400'></div>
-                      <div className='absolute bottom-5 left-5 right-5 h-px bg-blue-400'></div>
-                      <div className='absolute left-5 top-5 bottom-5 w-px bg-blue-400'></div>
-                      <div className='absolute right-5 top-5 bottom-5 w-px bg-blue-400'></div>
-                    </div>
-                  </div>
+                      <p className='text-3xl font-bold text-white mt-3 mb-2'>2,543</p>
 
-                  {/* Head front panel - futuristic visor */}
-                  <div className='absolute inset-x-0 top-6 h-16 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 rounded-lg mx-4 overflow-hidden shadow-lg border border-blue-700/50 transform-style-3d'>
-                    {/* Advanced visor effect */}
-                    <div className='absolute inset-0 bg-gradient-to-b from-blue-500/20 to-blue-500/5'></div>
-
-                    {/* Robot eyes - more expressive */}
-                    <div className='absolute inset-0 flex items-center justify-center'>
-                      <div className='flex space-x-12'>
-                        <div className='w-8 h-3 bg-gradient-to-r from-blue-400 to-blue-300 rounded-md animate-pulse shadow-lg shadow-blue-500/50'></div>
-                        <div
-                          className='w-8 h-3 bg-gradient-to-r from-blue-400 to-blue-300 rounded-md animate-pulse shadow-lg shadow-blue-500/50'
-                          style={{ animationDelay: '0.5s' }}
-                        ></div>
+                      <div className='w-full h-1 bg-blue-900/80 rounded-full mt-4 overflow-hidden'>
+                        <div className='h-full w-[75%] bg-blue-400 rounded-full'></div>
                       </div>
                     </div>
-
-                    {/* Scanning effect */}
-                    <div className='absolute inset-0 animate-scan opacity-30'></div>
                   </div>
 
-                  {/* Head details */}
-                  <div
-                    className='absolute top-0 right-3 w-4 h-4 rounded-full bg-gradient-to-br from-red-500 to-red-400 animate-pulse shadow-lg shadow-red-500/30'
-                    style={{ animationDuration: '1.5s' }}
-                  ></div>
-                  <div
-                    className='absolute top-0 left-3 w-4 h-4 rounded-full bg-gradient-to-br from-green-500 to-green-400 animate-pulse shadow-lg shadow-green-500/30'
-                    style={{ animationDuration: '2.5s', animationDelay: '-0.5s' }}
-                  ></div>
+                  {/* Event Stats Cards - Doanh thu */}
+                  <div className='hover-card-container'>
+                    <div className='card-base bg-purple-900/50 rounded-xl p-5 border border-purple-800/40 shadow-lg'>
+                      <div className='flex justify-between items-start mb-1'>
+                        <div className='flex items-center'>
+                          <CreditCard className='w-5 h-5 text-purple-400 mr-2' />
+                          <span className='text-purple-200 text-sm'>Doanh thu</span>
+                        </div>
+                        <div className='text-xs text-purple-200 font-semibold bg-purple-500/30 px-2 py-0.5 rounded-full'>
+                          +8%
+                        </div>
+                      </div>
 
-                  {/* Antenna */}
-                  <div className='absolute -top-8 left-1/2 -translate-x-1/2 w-1 h-8 bg-gray-700'>
-                    <div className='absolute -top-1 -left-1 w-3 h-3 rounded-full bg-blue-500 animate-pulse shadow shadow-blue-500/50'></div>
-                  </div>
+                      <p className='text-3xl font-bold text-white mt-3 mb-2'>156.4M</p>
 
-                  {/* Side vents with light */}
-                  <div className='absolute top-24 left-0 w-3 h-12 bg-gray-900 rounded-l-md overflow-hidden flex flex-col justify-evenly p-0.5'>
-                    <div className='w-full h-1 bg-blue-500/50 animate-pulse'></div>
-                    <div className='w-full h-1 bg-blue-500/50 animate-pulse' style={{ animationDelay: '-0.3s' }}></div>
-                    <div className='w-full h-1 bg-blue-500/50 animate-pulse' style={{ animationDelay: '-0.6s' }}></div>
-                  </div>
-                  <div className='absolute top-24 right-0 w-3 h-12 bg-gray-900 rounded-r-md overflow-hidden flex flex-col justify-evenly p-0.5'>
-                    <div className='w-full h-1 bg-blue-500/50 animate-pulse' style={{ animationDelay: '-0.2s' }}></div>
-                    <div className='w-full h-1 bg-blue-500/50 animate-pulse' style={{ animationDelay: '-0.5s' }}></div>
-                    <div className='w-full h-1 bg-blue-500/50 animate-pulse' style={{ animationDelay: '-0.8s' }}></div>
-                  </div>
-                </div>
-
-                {/* Robot neck - articulated */}
-                <div className='w-10 h-5 mx-auto bg-gray-700 border-t border-gray-600'></div>
-                <div className='w-16 h-3 mx-auto bg-gray-800 rounded-t-lg border-t border-x border-gray-700'></div>
-
-                {/* Robot body - sleek and futuristic */}
-                <div className='w-64 h-72 bg-gradient-to-b from-gray-800 to-gray-900 rounded-2xl mx-auto relative transform-style-3d shadow-xl overflow-hidden'>
-                  {/* Body metallic sheen */}
-                  <div className='absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent'></div>
-
-                  {/* Body panels and details */}
-                  <div className='absolute top-0 inset-x-0 h-16 border-b border-gray-700'></div>
-                  <div className='absolute top-16 inset-x-0 h-12 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 border-y border-gray-700'></div>
-
-                  {/* Advanced holographic display */}
-                  <div className='absolute top-6 left-0 right-0 mx-auto w-40 h-20 bg-gray-900 rounded-lg flex flex-col items-center justify-center border border-gray-700 overflow-hidden shadow-inner'>
-                    {/* Display content */}
-                    <div className='absolute inset-0 animate-scan opacity-20'></div>
-                    <div className='text-sm text-blue-400 font-mono mb-1'>EVENT MASTER</div>
-                    <div className='text-xs text-blue-500 font-mono animate-blink'>SYSTEM ACTIVE</div>
-
-                    {/* Data visualization */}
-                    <div className='mt-2 w-32 h-4 bg-gray-800 rounded-full overflow-hidden'>
-                      <div
-                        className='h-full w-3/4 bg-gradient-to-r from-blue-600 to-blue-400 animate-pulse rounded-full'
-                        style={{ animationDuration: '3s' }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {/* Enhanced glowing core */}
-                  <div
-                    className='absolute top-36 left-0 right-0 mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-blue-600/90 via-blue-500/90 to-blue-600/90 flex items-center justify-center shadow-lg shadow-blue-500/50 animate-pulse group-hover:shadow-xl group-hover:shadow-blue-500/60 transition-all duration-500'
-                    style={{ animationDuration: '3s', boxShadow: '0 0 30px rgba(37, 99, 235, 0.4)' }}
-                  >
-                    {/* Inner core layers */}
-                    <div className='w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-300 flex items-center justify-center shadow-inner'>
-                      <div className='w-8 h-8 rounded-full bg-blue-300 flex items-center justify-center shadow-inner'>
-                        <div className='w-4 h-4 rounded-full bg-white shadow-xl'></div>
+                      <div className='w-full h-1 bg-purple-900/80 rounded-full mt-4 overflow-hidden'>
+                        <div className='h-full w-[65%] bg-purple-400 rounded-full'></div>
                       </div>
                     </div>
-
-                    {/* Energy beams */}
-                    <div className='absolute -top-8 left-1/2 -translate-x-1/2 w-px h-8 bg-blue-400/50'></div>
-                    <div className='absolute -bottom-8 left-1/2 -translate-x-1/2 w-px h-8 bg-blue-400/50'></div>
-                    <div className='absolute -left-8 top-1/2 -translate-y-1/2 h-px w-8 bg-blue-400/50'></div>
-                    <div className='absolute -right-8 top-1/2 -translate-y-1/2 h-px w-8 bg-blue-400/50'></div>
                   </div>
 
-                  {/* Status indicators and tech details */}
-                  <div className='absolute bottom-12 left-0 right-0 mx-auto flex justify-center space-x-8'>
-                    <div className='w-3 h-3 rounded-full bg-green-500 animate-pulse shadow-sm shadow-green-500/50'></div>
-                    <div
-                      className='w-3 h-3 rounded-full bg-blue-500 animate-pulse shadow-sm shadow-blue-500/50'
-                      style={{ animationDelay: '-0.3s' }}
-                    ></div>
-                    <div
-                      className='w-3 h-3 rounded-full bg-purple-500 animate-pulse shadow-sm shadow-purple-500/50'
-                      style={{ animationDelay: '-0.6s' }}
-                    ></div>
-                  </div>
+                  {/* Event Stats Cards - Người tham dự */}
+                  <div className='hover-card-container'>
+                    <div className='card-base bg-indigo-900/50 rounded-xl p-5 border border-indigo-800/40 shadow-lg'>
+                      <div className='flex justify-between items-start mb-1'>
+                        <div className='flex items-center'>
+                          <Users className='w-5 h-5 text-indigo-400 mr-2' />
+                          <span className='text-indigo-200 text-sm'>Người tham dự</span>
+                        </div>
+                        <div className='text-xs text-indigo-200 font-semibold bg-indigo-500/30 px-2 py-0.5 rounded-full'>
+                          +5%
+                        </div>
+                      </div>
 
-                  {/* Bottom panel with vents */}
-                  <div className='absolute bottom-4 left-0 right-0 mx-auto w-40 h-4 bg-gray-800 rounded-lg border border-gray-700 overflow-hidden flex'>
-                    {Array.from({ length: 8 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className='flex-1 border-r border-gray-700 last:border-0 bg-gradient-to-b from-gray-800 to-gray-900'
-                      ></div>
-                    ))}
+                      <p className='text-3xl font-bold text-white mt-3 mb-2'>1,823</p>
+
+                      <div className='w-full h-1 bg-indigo-900/80 rounded-full mt-4 overflow-hidden'>
+                        <div className='h-full w-[82%] bg-indigo-400 rounded-full'></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Robot left arm - Ticket Management - Enhanced */}
-                <div
-                  className='absolute top-48 -left-32 w-40 h-12 animate-float transform-style-3d'
-                  data-depth='0.15'
-                  style={{
-                    transformOrigin: 'right center',
-                    animationDuration: '7s'
-                  }}
-                >
-                  {/* Upper arm */}
-                  <div className='absolute right-0 top-1/2 -translate-y-1/2 w-16 h-6 bg-gradient-to-l from-gray-700 to-gray-800 rounded-l-lg transform-style-3d shadow-md'>
-                    {/* Arm joint */}
-                    <div className='absolute right-0 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gradient-to-tr from-gray-800 to-gray-700 border border-gray-600 z-10 shadow-inner'>
-                      <div className='absolute inset-1 rounded-full bg-gradient-to-tr from-gray-700 to-gray-800 shadow-inner'></div>
+                {/* Upcoming Events Section */}
+                <div className='relative'>
+                  {/* Section header */}
+                  <div className='flex justify-between items-center mb-4'>
+                    <div className='flex items-center'>
+                      <Calendar className='w-5 h-5 text-blue-400 mr-2' />
+                      <h3 className='text-lg font-bold text-white'>Sắp diễn ra</h3>
                     </div>
+                    <button className='text-xs text-blue-300 font-medium bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1 rounded-full transition-colors'>
+                      Xem tất cả
+                    </button>
                   </div>
 
-                  {/* Forearm - more articulated */}
-                  <div
-                    className='absolute left-0 top-1/2 -translate-y-1/2 w-28 h-12 bg-gradient-to-r from-gray-800 to-gray-700 rounded-lg transform-style-3d shadow-md border border-gray-700 rotate-6'
-                    style={{
-                      boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)'
-                    }}
-                  >
-                    {/* Arm details */}
-                    <div className='absolute inset-0 overflow-hidden'>
-                      <div className='absolute top-2 left-0 right-0 mx-auto w-16 h-1 bg-gray-600 rounded-full'></div>
-                      <div className='absolute bottom-2 left-0 right-0 mx-auto w-16 h-1 bg-gray-600 rounded-full'></div>
-                    </div>
+                  {/* Events grid */}
+                  <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+                    {/* Event Card 1 */}
+                    <div className='hover-card-container'>
+                      <div className='card-base bg-blue-900/20 rounded-lg p-4 border border-blue-900/40 shadow-lg'>
+                        <div className='flex justify-between items-start mb-2'>
+                          <h4 className='font-semibold text-white'>Tech Conference 2025</h4>
+                          <span className='text-xs text-white px-2 py-0.5 rounded-full bg-blue-500/30 border border-blue-500/30'>
+                            Tech
+                          </span>
+                        </div>
 
-                    {/* Ticket management interface - holographic effect */}
-                    <div className='absolute top-0 left-1 right-1 bottom-0 bg-gradient-to-br from-blue-600/90 to-blue-500/90 rounded-lg flex items-center justify-center overflow-hidden shadow-lg'>
-                      {/* Holographic effect */}
-                      <div className='absolute inset-0 bg-gradient-to-b from-transparent via-blue-400/10 to-transparent animate-scan'></div>
-                      <div className='absolute inset-0 flex flex-col items-center justify-center'>
-                        <Ticket className='h-5 w-5 text-white drop-shadow-md' />
-                        <div className='relative mt-1'>
-                          <span className='text-xs text-white font-bold drop-shadow-md'>BÁN VÉ</span>
-                          <div className='absolute -bottom-1 left-0 right-0 h-px bg-white/50'></div>
+                        <div className='flex items-center text-xs text-gray-400 mb-3'>
+                          <Calendar className='w-3 h-3 mr-1' />
+                          25-28 Th05, 2025
+                        </div>
+
+                        <div className='flex justify-between items-center'>
+                          <div className='flex -space-x-1'>
+                            {[...Array(3)].map((_, i) => (
+                              <div
+                                key={i}
+                                className='w-5 h-5 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 border border-gray-600'
+                              ></div>
+                            ))}
+                            <div className='w-5 h-5 rounded-full bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-[10px] text-blue-300'>
+                              +18
+                            </div>
+                          </div>
+                          <span className='text-xs text-blue-300'>250 vé đã bán</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Wrist joint */}
-                    <div className='absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-4 h-4 rounded-full bg-gradient-to-tr from-gray-800 to-gray-700 border border-gray-600 z-10 shadow'></div>
-                  </div>
-                </div>
+                    {/* Event Card 2 */}
+                    <div className='hover-card-container'>
+                      <div className='card-base bg-purple-900/20 rounded-lg p-4 border border-purple-900/40 shadow-lg'>
+                        <div className='flex justify-between items-start mb-2'>
+                          <h4 className='font-semibold text-white'>Music Festival</h4>
+                          <span className='text-xs text-white px-2 py-0.5 rounded-full bg-purple-500/30 border border-purple-500/30'>
+                            Music
+                          </span>
+                        </div>
 
-                {/* Robot right arm - Event Management - Enhanced */}
-                <div
-                  className='absolute top-48 -right-32 w-40 h-12 animate-float transform-style-3d'
-                  data-depth='0.2'
-                  style={{
-                    transformOrigin: 'left center',
-                    animationDuration: '8s',
-                    animationDelay: '-2s'
-                  }}
-                >
-                  {/* Upper arm */}
-                  <div className='absolute left-0 top-1/2 -translate-y-1/2 w-16 h-6 bg-gradient-to-r from-gray-800 to-gray-700 rounded-r-lg transform-style-3d shadow-md'>
-                    {/* Arm joint */}
-                    <div className='absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-gradient-to-tr from-gray-800 to-gray-700 border border-gray-600 z-10 shadow-inner'>
-                      <div className='absolute inset-1 rounded-full bg-gradient-to-tr from-gray-700 to-gray-800 shadow-inner'></div>
-                    </div>
-                  </div>
+                        <div className='flex items-center text-xs text-gray-400 mb-3'>
+                          <Calendar className='w-3 h-3 mr-1' />
+                          12-15 Th06, 2025
+                        </div>
 
-                  {/* Forearm - more articulated */}
-                  <div
-                    className='absolute right-0 top-1/2 -translate-y-1/2 w-28 h-12 bg-gradient-to-l from-gray-800 to-gray-700 rounded-lg transform-style-3d shadow-md border border-gray-700 -rotate-6'
-                    style={{
-                      boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.3)'
-                    }}
-                  >
-                    {/* Arm details */}
-                    <div className='absolute inset-0 overflow-hidden'>
-                      <div className='absolute top-2 left-0 right-0 mx-auto w-16 h-1 bg-gray-600 rounded-full'></div>
-                      <div className='absolute bottom-2 left-0 right-0 mx-auto w-16 h-1 bg-gray-600 rounded-full'></div>
-                    </div>
-
-                    {/* Event management interface - holographic effect */}
-                    <div className='absolute top-0 left-1 right-1 bottom-0 bg-gradient-to-br from-purple-600/90 to-purple-500/90 rounded-lg flex items-center justify-center overflow-hidden shadow-lg'>
-                      {/* Holographic effect */}
-                      <div className='absolute inset-0 bg-gradient-to-b from-transparent via-purple-400/10 to-transparent animate-scan'></div>
-                      <div className='absolute inset-0 flex flex-col items-center justify-center'>
-                        <Calendar className='h-5 w-5 text-white drop-shadow-md' />
-                        <div className='relative mt-1'>
-                          <span className='text-xs text-white font-bold drop-shadow-md'>QUẢN LÝ</span>
-                          <div className='absolute -bottom-1 left-0 right-0 h-px bg-white/50'></div>
+                        <div className='flex justify-between items-center'>
+                          <div className='flex -space-x-1'>
+                            {[...Array(3)].map((_, i) => (
+                              <div
+                                key={i}
+                                className='w-5 h-5 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 border border-gray-600'
+                              ></div>
+                            ))}
+                            <div className='w-5 h-5 rounded-full bg-purple-500/20 border border-purple-500/30 flex items-center justify-center text-[10px] text-purple-300'>
+                              +32
+                            </div>
+                          </div>
+                          <span className='text-xs text-purple-300'>512 vé đã bán</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Wrist joint */}
-                    <div className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 w-4 h-4 rounded-full bg-gradient-to-tr from-gray-800 to-gray-700 border border-gray-600 z-10 shadow'></div>
+                    {/* Event Card 3 */}
+                    <div className='hover-card-container'>
+                      <div className='card-base bg-green-900/20 rounded-lg p-4 border border-green-900/40 shadow-lg'>
+                        <div className='flex justify-between items-start mb-2'>
+                          <h4 className='font-semibold text-white'>Business Summit</h4>
+                          <span className='text-xs text-white px-2 py-0.5 rounded-full bg-green-500/30 border border-green-500/30'>
+                            Business
+                          </span>
+                        </div>
+
+                        <div className='flex items-center text-xs text-gray-400 mb-3'>
+                          <Calendar className='w-3 h-3 mr-1' />
+                          02-03 Th07, 2025
+                        </div>
+
+                        <div className='flex justify-between items-center'>
+                          <div className='flex -space-x-1'>
+                            {[...Array(3)].map((_, i) => (
+                              <div
+                                key={i}
+                                className='w-5 h-5 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 border border-gray-600'
+                              ></div>
+                            ))}
+                            <div className='w-5 h-5 rounded-full bg-green-500/20 border border-green-500/30 flex items-center justify-center text-[10px] text-green-300'>
+                              +24
+                            </div>
+                          </div>
+                          <span className='text-xs text-green-300'>320 vé đã bán</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Floating UI elements - Adjusted positioning */}
-                <div
-                  className='absolute -right-16 -top-32 bg-white/90 p-3 rounded-lg shadow-lg parallax-element animate-float backdrop-blur-sm'
-                  data-depth='0.3'
-                  style={{ transform: 'translateZ(40px)', animationDuration: '5s' }}
-                >
-                  <div className='flex items-center gap-2'>
-                    <Ticket className='h-5 w-5 text-blue-500' />
-                    <span className='text-gray-800 font-medium'>250 vé đã bán</span>
-                  </div>
-                </div>
+                {/* Dashboard Glow Effects */}
+                <div className='absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-xl'></div>
+                <div className='absolute bottom-0 left-0 w-32 h-32 bg-purple-500/10 rounded-full blur-xl'></div>
+              </div>
 
-                <div
-                  className='absolute -left-20 -bottom-6 bg-white/90 p-3 rounded-lg shadow-lg parallax-element animate-float backdrop-blur-sm'
-                  data-depth='0.25'
-                  style={{ transform: 'translateZ(30px)', animationDuration: '6s', animationDelay: '-1.5s' }}
-                >
-                  <div className='flex items-center gap-2'>
-                    <Users className='h-5 w-5 text-purple-500' />
-                    <span className='text-gray-800 font-medium'>150 người tham dự</span>
-                  </div>
+              {/* Floating UI elements */}
+              <div
+                className='absolute top-1/4 -right-12 bg-white/90 p-3 rounded-lg shadow-lg backdrop-blur-sm animate-float'
+                style={{ transform: 'translateZ(40px)', animationDuration: '5s', zIndex: 40 }}
+              >
+                <div className='flex items-center gap-2'>
+                  <Ticket className='h-5 w-5 text-blue-500' />
+                  <span className='text-gray-800 font-medium'>250 vé đã bán hôm nay</span>
                 </div>
+              </div>
 
-                <div
-                  className='absolute right-16 bottom-10 bg-white/90 p-3 rounded-lg shadow-lg parallax-element animate-float backdrop-blur-sm'
-                  data-depth='0.35'
-                  style={{ transform: 'translateZ(35px)', animationDuration: '7s', animationDelay: '-3s' }}
-                >
-                  <div className='flex items-center gap-2'>
-                    <Calendar className='h-5 w-5 text-green-500' />
-                    <span className='text-gray-800 font-medium'>Sắp diễn ra: 3 sự kiện</span>
-                  </div>
+              <div
+                className='absolute -left-10 bottom-1/4 bg-white/90 p-3 rounded-lg shadow-lg backdrop-blur-sm animate-float'
+                style={{ transform: 'translateZ(30px)', animationDuration: '6s', animationDelay: '-2s', zIndex: 40 }}
+              >
+                <div className='flex items-center gap-2'>
+                  <Users className='h-5 w-5 text-purple-500' />
+                  <span className='text-gray-800 font-medium'>+15% người tham dự</span>
                 </div>
               </div>
 
               {/* Enhanced decorative lighting effects */}
               <div
-                className='absolute -right-20 -top-10 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl parallax-element animate-pulse'
-                data-depth='0.1'
+                className='absolute -right-20 -top-10 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl animate-pulse'
                 style={{ animationDuration: '10s' }}
               ></div>
               <div
-                className='absolute -left-20 top-36 w-60 h-60 bg-purple-500/20 rounded-full blur-2xl parallax-element animate-pulse'
-                data-depth='0.15'
+                className='absolute -left-20 top-36 w-60 h-60 bg-purple-500/20 rounded-full blur-2xl animate-pulse'
                 style={{ animationDuration: '13s', animationDelay: '-2s' }}
               ></div>
               <div
-                className='absolute bottom-20 right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl parallax-element animate-pulse'
-                data-depth='0.12'
+                className='absolute bottom-20 right-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl animate-pulse'
                 style={{ animationDuration: '8s', animationDelay: '-4s' }}
-              ></div>
-
-              {/* Lens flare effect */}
-              <div
-                className='absolute top-10 right-20 w-4 h-4 bg-white/80 rounded-full blur-sm animate-pulse'
-                style={{ animationDuration: '2s' }}
-              ></div>
-              <div
-                className='absolute top-12 right-22 w-2 h-2 bg-white/60 rounded-full blur-sm animate-pulse'
-                style={{ animationDuration: '2s' }}
               ></div>
             </div>
           </div>
         </div>
       </div>
+
+      <style>{`
+        .hover-card-container {
+          perspective: 1000px;
+          transform-style: preserve-3d;
+          position: relative;
+          z-index: 10;
+          transition: z-index 0.1s step-end;
+        }
+
+        .hover-card-container:hover {
+          z-index: 30;
+        }
+
+        .card-base {
+          transform-origin: center bottom;
+          transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1.5), box-shadow 0.5s ease, border-color 0.3s ease;
+          position: relative;
+          will-change: transform;
+        }
+
+        .hover-card-container:hover .card-base {
+          transform: rotateX(-20deg) translateY(-40px);
+          box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(0, 0, 0, 0.2);
+          border-color: rgba(99, 102, 241, 0.4);
+        }
+      `}</style>
     </section>
   )
 }
